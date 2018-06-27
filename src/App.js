@@ -14,7 +14,7 @@ class App extends React.Component {
     appleMusicLinkHandler.getInformations(this.state.link).then((musicInformations) => {
       this.setState({informations: musicInformations});
     }).catch((reason) => {
-      alert(reason);
+      alert(JSON.stringify(reason));
     });
   }
 
