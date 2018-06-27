@@ -5,6 +5,7 @@ class AppleMusicLinkHandler {
 
     constructor() {
         this.musicKit = window.MusicKit.getInstance();
+        console.log(this.musicKit.api.storefrontId);
     }
 
     getInformations(link) {
@@ -34,7 +35,7 @@ class AppleMusicLinkHandler {
     searchArtist(url) {
         let artistId = this.getArtistId(url);
         return new Promise((resolve, reject) => {
-            //this.musicKit.authorize().then(function() {
+            this.musicKit.authorize().then(function() {
                 let musicKit = window.MusicKit.getInstance();
                 musicKit.api.artist(artistId).then((appleMusicArtist) => {
                     let information = new MusicInformation();
@@ -44,7 +45,7 @@ class AppleMusicLinkHandler {
                 }).catch(() => {
                     reject();
                 }); 
-            //});
+            });
         });
     }
 
@@ -64,7 +65,7 @@ class AppleMusicLinkHandler {
     searchAlbum(url) {
         let albumId = this.getAlbumId(url);
         return new Promise((resolve, reject) => {
-            //this.musicKit.authorize().then(function() {
+            this.musicKit.authorize().then(function() {
                 let musicKit = window.MusicKit.getInstance();
                 musicKit.api.album(albumId).then((appleMusicAlbum) => {
                     let information = new MusicInformation();
@@ -75,7 +76,7 @@ class AppleMusicLinkHandler {
                 }).catch(() => {
                     reject();
                 }); 
-            //});
+            });
         });
     }
 
@@ -94,7 +95,7 @@ class AppleMusicLinkHandler {
     searchSong(url) {
         let songId = this.getSongId(url);
         return new Promise((resolve, reject) => {
-            //this.musicKit.authorize().then(function() {
+            this.musicKit.authorize().then(function() {
                 let musicKit = window.MusicKit.getInstance();
                 musicKit.api.song(songId).then((appleMusicSong) => {
                     let information = new MusicInformation();
@@ -106,13 +107,9 @@ class AppleMusicLinkHandler {
                 }).catch(() => {
                     reject();
                 }); 
-            //});
+            });
         });
     }
 }
 
 export default AppleMusicLinkHandler;
-
-
-// WEBPACK FOOTER //
-// src/appleMusic/AppleMusicLinkHandler.js
