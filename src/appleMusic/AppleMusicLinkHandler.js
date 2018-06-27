@@ -1,11 +1,18 @@
 import { MusicInformation } from "../core/MusicInformation";
+import axios from 'axios';
 
 class AppleMusicLinkHandler {
-    musicKit;
+    httpClient;
 
     constructor() {
-        this.musicKit = window.MusicKit.getInstance();
-        console.log(this.musicKit.api.storefrontId);
+        let developerToken = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ijg5N0E1RkE4WkEifQ.eyJpYXQiOjE1MzAxMDUwNjQsImV4cCI6MTU0NTY1NzA2NCwiaXNzIjoiWkY5OUdFOVI1VyJ9.JRN6e__NCO8Yjhj2ynJV20RbPOuNDo9WLcR_lYg1B348ea4BembEqraV53MF-c14jxKYk_0pRjjJlhmF3lkmdw";
+       
+        this.httpClient = axios.create({
+            baseURL: "https://api.music.apple.com/",
+            headers: {
+                "Authorization": "Bearer " + developerToken    
+            }
+        });
     }
 
     getInformations(link) {
@@ -35,16 +42,15 @@ class AppleMusicLinkHandler {
     searchArtist(url) {
         let artistId = this.getArtistId(url);
         return new Promise((resolve, reject) => {
-            this.musicKit.authorize().then(function() {
-                let musicKit = window.MusicKit.getInstance();
-                musicKit.api.artist(artistId).then((appleMusicArtist) => {
-                    let information = new MusicInformation();
-                    information.mediaType = "artist";
-                    information.artist = appleMusicArtist.attributes.name;
-                    resolve(information);
-                }).catch(() => {
-                    reject();
-                }); 
+            this.httpClient.get("/v1/catalog/de/artists/" + artistId).then(function(response) {
+                let appleMusicArtist = response.data.data[0];
+
+                let information = new MusicInformation();
+                information.mediaType = "artist";
+                information.artist = appleMusicArtist.attributes.name;
+                resolve(information);
+            }).catch(() => {
+                reject();
             });
         });
     }
@@ -65,17 +71,16 @@ class AppleMusicLinkHandler {
     searchAlbum(url) {
         let albumId = this.getAlbumId(url);
         return new Promise((resolve, reject) => {
-            this.musicKit.authorize().then(function() {
-                let musicKit = window.MusicKit.getInstance();
-                musicKit.api.album(albumId).then((appleMusicAlbum) => {
-                    let information = new MusicInformation();
-                    information.mediaType = "album";
-                    information.artist = appleMusicAlbum.attributes.artistName;
-                    information.album = appleMusicAlbum.attributes.name;
-                    resolve(information);
-                }).catch(() => {
-                    reject();
-                }); 
+            this.httpClient.get("/v1/catalog/de/albums/" + albumId).then(function(response) {
+                let appleMusicAlbum = response.data.data[0];
+
+                let information = new MusicInformation();
+                information.mediaType = "album";
+                information.artist = appleMusicAlbum.attributes.artistName;
+                information.album = appleMusicAlbum.attributes.name;
+                resolve(information);
+            }).catch(() => {
+                reject();
             });
         });
     }
@@ -95,18 +100,17 @@ class AppleMusicLinkHandler {
     searchSong(url) {
         let songId = this.getSongId(url);
         return new Promise((resolve, reject) => {
-            this.musicKit.authorize().then(function() {
-                let musicKit = window.MusicKit.getInstance();
-                musicKit.api.song(songId).then((appleMusicSong) => {
-                    let information = new MusicInformation();
-                    information.mediaType = "song";
-                    information.artist = appleMusicSong.attributes.artistName;
-                    information.album = appleMusicSong.attributes.albumName;
-                    information.song = appleMusicSong.attributes.name;
-                    resolve(information);
-                }).catch(() => {
-                    reject();
-                }); 
+            this.httpClient.get("/v1/catalog/de/songs/" + songId).then(function(response) {
+                let appleMusicSong = response.data.data[0];
+
+                let information = new MusicInformation();
+                information.mediaType = "song";
+                information.artist = appleMusicSong.attributes.artistName;
+                information.album = appleMusicSong.attributes.albumName;
+                information.song = appleMusicSong.attributes.name;
+                resolve(information);
+            }).catch(() => {
+                reject();
             });
         });
     }
