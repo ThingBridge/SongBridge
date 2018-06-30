@@ -1,10 +1,31 @@
 import { MusicInformation } from "../core/MusicInformation";
 import { URLCheck } from "../core/URLCheck";
-import { log } from "core-js";
 
 class SpotifyLinkHandler {
+    accessToken;
 
     constructor() {
+        this.fetchAccessToken();
+    }
+
+    fetchAccessToken() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                let result = JSON.parse(xhttp.responseText);
+                this.accessToken = result["access_token"];
+                setTimeout(this.fetchAccessToken, 3300000)
+            }
+            else if (this.readyState === 4) {
+                this.accessToken = null;
+                setTimeout(this.fetchAccessToken, 3300000)
+            }
+        }
+        xhttp.open(`POST`, `https://accounts.spotify.com/api/token`, true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.setRequestHeader("Accept", "application/json");
+        xhttp.setRequestHeader("Authorization", "Basic ZGM4N2QyNWE2MzVkNGQ1Njg0NGFhYWFiYTQ2MjA2NDA6YTM3Nzk2ZDk0MWQyNDhjZGJlZjRkODQ2MWI1YTA3ZWU=");        
+        xhttp.send("grant_type=client_credentials");
     }
 
     getInformations(link) {
@@ -22,7 +43,8 @@ class SpotifyLinkHandler {
             }else{
                 return null;
             }
-        }else{
+        }
+        else {
             return null;
         }
                  
@@ -40,8 +62,14 @@ class SpotifyLinkHandler {
 
     searchArtist(url) {
         let artistId = this.getArtistId(url);
-        
+        let accessToken = this.accessToken;
+
         return new Promise((resolve, reject) => {
+            if (accessToken == null) {
+                reject();
+                return;
+            }
+
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                     if (this.readyState === 4 && this.status === 200) {
@@ -76,7 +104,13 @@ class SpotifyLinkHandler {
 
     searchAlbum(url) {
         let albumId = this.getAlbumId(url);
+        let accessToken = this.accessToken;
         return new Promise((resolve, reject) => {
+            if (accessToken == null) {
+                reject();
+                return;
+            }
+
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState === 4 && this.status === 200) {
@@ -111,7 +145,13 @@ class SpotifyLinkHandler {
 
     searchTrack(url) {
         let trackId = this.getTrackId(url);
+        let accessToken = this.accessToken;
         return new Promise((resolve, reject) => {
+            if (accessToken == null) {
+                reject();
+                return;
+            }
+
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState === 4 && this.status === 200) {
