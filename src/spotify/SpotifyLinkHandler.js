@@ -41,21 +41,27 @@ class SpotifyLinkHandler {
     searchArtist(url) {
         let artistId = this.getArtistId(url);
         
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    let result = JSON.parse(xhttp.responseText);
-                    let information = new MusicInformation();
-                    information.mediaType = "artist";
-                    information.artist = result.name;
-                    return information;
+        return new Promise((resolve, reject) => {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                    if (this.readyState === 4 && this.status === 200) {
+                        let result = JSON.parse(xhttp.responseText);
+                        let information = new MusicInformation();
+                        information.mediaType = "artist";
+                        information.artist = result.name;
+                        resolve(information);
+                    }
+                    else if (this.readyState === 4) {
+                        reject();
+                    }
                 }
-            }
-        xhttp.open(`GET`, `https://api.spotify.com/v1/artists/${artistId}`, true);
-        xhttp.setRequestHeader("Content-type", "application/json");
-        xhttp.setRequestHeader("Accept", "application/json");
-        xhttp.setRequestHeader("Authorization", "Bearer BQASjTY6ACazVt6Cg4rCtzZ7zyZZh2z0j6lNvO39EoyJoKdiWGfG");        
-        xhttp.send();
+            xhttp.open(`GET`, `https://api.spotify.com/v1/artists/${artistId}`, true);
+            xhttp.setRequestHeader("Content-type", "application/json");
+            xhttp.setRequestHeader("Accept", "application/json");
+            xhttp.setRequestHeader("Authorization", "Bearer BQAelY_GwGS5fbQmTFqjTM5ra3J48uw0N8pDd2zxutS7lQrp5rghfa0O5lzEUhPi_SDla74yKVHxT2EMQFQ");        
+            xhttp.send();
+        });
+        
     }
 
     // Album
@@ -70,22 +76,27 @@ class SpotifyLinkHandler {
 
     searchAlbum(url) {
         let albumId = this.getAlbumId(url);
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                let result = JSON.parse(xhttp.responseText);
-                let information = new MusicInformation();
-                information.mediaType = "album";
-                information.artist = result.artists["0"].name;
-                information.album = result.name;                
-                return information;
+        return new Promise((resolve, reject) => {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    let result = JSON.parse(xhttp.responseText);
+                    let information = new MusicInformation();
+                    information.mediaType = "album";
+                    information.artist = result.artists["0"].name;
+                    information.album = result.name;    
+                    resolve(information);
+                }
+                else if (this.readyState === 4) {
+                    reject();
+                }
             }
-        }
-        xhttp.open(`GET`, `https://api.spotify.com/v1/albums/${albumId}`, true);
-        xhttp.setRequestHeader("Content-type", "application/json");
-        xhttp.setRequestHeader("Accept", "application/json");
-        xhttp.setRequestHeader("Authorization", "Bearer BQASjTY6ACazVt6Cg4rCtzZ7zyZZh2z0j6lNvO39EoyJoKdiWGfG-8vlzzkMJ1ri2bAoOZujd_jXAfVNldGkanD3310svz4IXnG2MfQdR8mz6__OcTa1hnKu-vUAGCA10cuUMWrhcZNrpEA");
-        xhttp.send();
+            xhttp.open(`GET`, `https://api.spotify.com/v1/albums/${albumId}`, true);
+            xhttp.setRequestHeader("Content-type", "application/json");
+            xhttp.setRequestHeader("Accept", "application/json");
+            xhttp.setRequestHeader("Authorization", "Bearer BQAelY_GwGS5fbQmTFqjTM5ra3J48uw0N8pDd2zxutS7lQrp5rghfa0O5lzEUhPi_SDla74yKVHxT2EMQFQ");
+            xhttp.send();
+        });
     }
 
     // Track
@@ -100,23 +111,28 @@ class SpotifyLinkHandler {
 
     searchTrack(url) {
         let trackId = this.getTrackId(url);
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                let result = JSON.parse(xhttp.responseText);
-                let information = new MusicInformation();
-                information.mediaType = "song";
-                information.artist = result.artists["0"].name;
-                information.album = result.album.name;;
-                information.song = result.name;
-                return information;
+        return new Promise((resolve, reject) => {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    let result = JSON.parse(xhttp.responseText);
+                    let information = new MusicInformation();
+                    information.mediaType = "song";
+                    information.artist = result.artists["0"].name;
+                    information.album = result.album.name;;
+                    information.song = result.name;
+                    resolve(information);
+                }
+                else if (this.readyState === 4) {
+                    reject();
+                }
             }
-        }
-        xhttp.open(`GET`, `https://api.spotify.com/v1/tracks/${trackId}`, true);
-        xhttp.setRequestHeader("Content-type", "application/json");
-        xhttp.setRequestHeader("Accept", "application/json");
-        xhttp.setRequestHeader("Authorization", "Bearer BQASjTY6ACazVt6Cg4rCtzZ7zyZZh2z0j6lNvO39EoyJoKdiWGfG-8vlzzkMJ1ri2bAoOZujd_jXAfVNldGkanD3310svz4IXnG2MfQdR8mz6__OcTa1hnKu-vUAGCA10cuUMWrhcZNrpEA");
-        xhttp.send();
+            xhttp.open(`GET`, `https://api.spotify.com/v1/tracks/${trackId}`, true);
+            xhttp.setRequestHeader("Content-type", "application/json");
+            xhttp.setRequestHeader("Accept", "application/json");
+            xhttp.setRequestHeader("Authorization", "Bearer BQAelY_GwGS5fbQmTFqjTM5ra3J48uw0N8pDd2zxutS7lQrp5rghfa0O5lzEUhPi_SDla74yKVHxT2EMQFQ");
+            xhttp.send();
+        });
     }
 }
 

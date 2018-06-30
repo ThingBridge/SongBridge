@@ -22,7 +22,12 @@ class App extends React.Component {
 
   handleShares() {
     let spotifyLinkHandler = new SpotifyLinkHandler();
-    console.log(spotifyLinkHandler.getInformations(this.state.link));
+    spotifyLinkHandler.getInformations(this.state.link).then((musicInformations) => {
+      console.log(musicInformations);
+      this.setState({informations: musicInformations});
+    }).catch(() => {
+      console.log("Fehler");
+    });
   }
 
   render() {
