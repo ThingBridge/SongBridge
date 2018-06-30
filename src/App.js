@@ -4,7 +4,6 @@ import AppleMusicLinkHandler from './appleMusic/AppleMusicLinkHandler';
 import SpotifyLinkHandler from './spotify/SpotifyLinkHandler';
 
 class App extends React.Component {
-  appleMusicLinkHandler;
   spotifyLinkHandler;
 
   constructor(props) {
@@ -12,11 +11,12 @@ class App extends React.Component {
     this.state = { link: "https://open.spotify.com/track/77NNZQSqzLNqh2A9JhLRkg", informations: {}};
     this.handleShare = this.handleShare.bind(this);
     this.handleShares = this.handleShares.bind(this);
-
   }
 
   handleShare() {
-    this.appleMusicLinkHandler.getInformations(this.state.link).then((musicInformations) => {
+
+    let appleMusicLinkHandler = new AppleMusicLinkHandler();
+    appleMusicLinkHandler.getInformations(this.state.link).then((musicInformations) => {
       this.setState({informations: musicInformations});
     }).catch((reason) => {
       alert(JSON.stringify(reason));
@@ -33,7 +33,6 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.appleMusicLinkHandler = new AppleMusicLinkHandler();
     this.spotifyLinkHandler = new SpotifyLinkHandler();
   }
 
