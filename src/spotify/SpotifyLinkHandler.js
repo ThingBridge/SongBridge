@@ -7,17 +7,25 @@ export class SpotifyLinkHandler {
     }
 
     getInformations(link) {
+        let musicInformations = new MusicInformation();
+        musicInformations.source = "spotify"
         let urlChecker = new URLCheck();
         if (urlChecker.isURLValid(link)){
             let url = new URL(link);
             if (this.isArtistLink(url)) {
-                return this.searchArtist(url);
+                musicInformations.mediaType = "artist"
+                musicInformations.id = this.getArtistId(url)
+                return musicInformations
             }
             else if (this.isAlbumLink(url)) {
-                return this.searchAlbum(url);
+                musicInformations.mediaType = "album"
+                musicInformations.id = this.getAlbumId(url)
+                return musicInformations
             }
             else if (this.isSongLink(url)) {
-                return this.searchSong(url);
+                musicInformations.mediaType = "song"
+                musicInformations.id = this.getSongId(url)
+                return musicInformations
             }else{
                 return null;
             }

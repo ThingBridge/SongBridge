@@ -1,17 +1,24 @@
 import { MusicInformation } from "../core/MusicInformation";
 
 export class AppleMusicLinkHandler {
-
     getInformations(link) {
+        var informations = new MusicInformation();
+        informations.source = "appleMusic"
         let url = new URL(link);
         if (this.isArtistLink(url)) {
-            return this.searchArtist(url);
+            informations.mediaType = "artist"
+            informations.id = this.getArtistId(url)
+            return informations
         }
         else if (this.isAlbumLink(url)) {
-            return this.searchAlbum(url);
+            informations.mediaType = "album"
+            informations.id = this.getAlbumId(url)
+            return informations
         }
         else if (this.isSongLink(url)) {
-            return this.searchSong(url);
+            informations.mediaType = "song"
+            informations.id = this.getSongId(url)
+            return informations
         }
 
         return null;
