@@ -29,10 +29,6 @@ export class AppleMusicLinkHandler {
     searchArtist(url) {
         let artistId = this.getArtistId(url);
         return new Promise((resolve, reject) => {
-            if (accessToken == null) {
-                reject();
-                return;
-            }
 
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
@@ -67,10 +63,6 @@ export class AppleMusicLinkHandler {
     searchAlbum(url) {
         let albumId = this.getAlbumId(url);
         return new Promise((resolve, reject) => {
-            if (accessToken == null) {
-                reject();
-                return;
-            }
 
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
@@ -104,10 +96,6 @@ export class AppleMusicLinkHandler {
     searchSong(url) {
         let songId = this.getSongId(url);
         return new Promise((resolve, reject) => {
-            if (accessToken == null) {
-                reject();
-                return;
-            }
 
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {

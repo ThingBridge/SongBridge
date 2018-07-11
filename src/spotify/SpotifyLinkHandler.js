@@ -2,7 +2,6 @@ import { MusicInformation } from "../core/MusicInformation";
 import { URLCheck } from "../core/URLCheck";
 
 export class SpotifyLinkHandler {
-    accessToken;
 
     constructor() {
     }
@@ -42,10 +41,6 @@ export class SpotifyLinkHandler {
         let artistId = this.getArtistId(url);
 
         return new Promise((resolve, reject) => {
-            if (accessToken == null) {
-                reject();
-                return;
-            }
 
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
@@ -77,10 +72,6 @@ export class SpotifyLinkHandler {
     searchAlbum(url) {
         let albumId = this.getAlbumId(url);
         return new Promise((resolve, reject) => {
-            if (accessToken == null) {
-                reject();
-                return;
-            }
 
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
@@ -112,10 +103,6 @@ export class SpotifyLinkHandler {
     searchSong(url) {
         let songId = this.getSongId(url);
         return new Promise((resolve, reject) => {
-            if (accessToken == null) {
-                reject();
-                return;
-            }
 
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
