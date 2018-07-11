@@ -1,31 +1,10 @@
 import { MusicInformation } from "../core/MusicInformation";
 import { URLCheck } from "../core/URLCheck";
 
-class SpotifyLinkHandler {
+export class SpotifyLinkHandler {
     accessToken;
 
     constructor() {
-        this.fetchAccessToken();
-    }
-
-    fetchAccessToken() {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState === 4 && this.status === 200) {
-                let result = JSON.parse(xhttp.responseText);
-                this.accessToken = result["access_token"];
-                setTimeout(this.fetchAccessToken, 3300000)
-            }
-            else if (this.readyState === 4) {
-                this.accessToken = null;
-                setTimeout(this.fetchAccessToken, 3300000)
-            }
-        }
-        xhttp.open(`POST`, `https://accounts.spotify.com/api/token`, true);
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.setRequestHeader("Accept", "application/json");
-        xhttp.setRequestHeader("Authorization", "Basic ZGM4N2QyNWE2MzVkNGQ1Njg0NGFhYWFiYTQ2MjA2NDA6YTM3Nzk2ZDk0MWQyNDhjZGJlZjRkODQ2MWI1YTA3ZWU=");        
-        xhttp.send("grant_type=client_credentials");
     }
 
     getInformations(link) {
@@ -38,16 +17,15 @@ class SpotifyLinkHandler {
             else if (this.isAlbumLink(url)) {
                 return this.searchAlbum(url);
             }
-            else if (this.isTrackLink(url)) {
-                return this.searchTrack(url);
+            else if (this.isSongLink(url)) {
+                return this.searchSong(url);
             }else{
                 return null;
             }
         }
         else {
             return null;
-        }
-                 
+        }           
     }
 
     // Artist
@@ -62,7 +40,6 @@ class SpotifyLinkHandler {
 
     searchArtist(url) {
         let artistId = this.getArtistId(url);
-        let accessToken = this.accessToken;
 
         return new Promise((resolve, reject) => {
             if (accessToken == null) {
@@ -72,24 +49,19 @@ class SpotifyLinkHandler {
 
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
-                    if (this.readyState === 4 && this.status === 200) {
-                        let result = JSON.parse(xhttp.responseText);
-                        let information = new MusicInformation();
-                        information.mediaType = "artist";
-                        information.artist = result.name;
-                        resolve(information);
-                    }
-                    else if (this.readyState === 4) {
-                        reject();
-                    }
+                if (this.readyState === 4 && this.status === 200) {
+                    let result = JSON.parse(xhttp.responseText);
+                    resolve(result);
                 }
-            xhttp.open(`GET`, `https://api.spotify.com/v1/artists/${artistId}`, true);
+                else if (this.readyState === 4) {
+                    reject();
+                }
+            }
+            xhttp.open(`GET`, `http://localhost:8080/bridge?mediatype=artist&source=spotify&id=${artistId}`, true);
             xhttp.setRequestHeader("Content-type", "application/json");
-            xhttp.setRequestHeader("Accept", "application/json");
-            xhttp.setRequestHeader("Authorization", "Bearer BQAelY_GwGS5fbQmTFqjTM5ra3J48uw0N8pDd2zxutS7lQrp5rghfa0O5lzEUhPi_SDla74yKVHxT2EMQFQ");        
+            xhttp.setRequestHeader("Accept", "application/json");     
             xhttp.send();
         });
-        
     }
 
     // Album
@@ -104,7 +76,6 @@ class SpotifyLinkHandler {
 
     searchAlbum(url) {
         let albumId = this.getAlbumId(url);
-        let accessToken = this.accessToken;
         return new Promise((resolve, reject) => {
             if (accessToken == null) {
                 reject();
@@ -115,37 +86,31 @@ class SpotifyLinkHandler {
             xhttp.onreadystatechange = function () {
                 if (this.readyState === 4 && this.status === 200) {
                     let result = JSON.parse(xhttp.responseText);
-                    let information = new MusicInformation();
-                    information.mediaType = "album";
-                    information.artist = result.artists["0"].name;
-                    information.album = result.name;    
-                    resolve(information);
+                    resolve(result);
                 }
                 else if (this.readyState === 4) {
                     reject();
                 }
             }
-            xhttp.open(`GET`, `https://api.spotify.com/v1/albums/${albumId}`, true);
+            xhttp.open(`GET`, `http://localhost:8080/bridge?mediatype=album&source=spotify&id=${albumId}`, true);
             xhttp.setRequestHeader("Content-type", "application/json");
-            xhttp.setRequestHeader("Accept", "application/json");
-            xhttp.setRequestHeader("Authorization", "Bearer BQAelY_GwGS5fbQmTFqjTM5ra3J48uw0N8pDd2zxutS7lQrp5rghfa0O5lzEUhPi_SDla74yKVHxT2EMQFQ");
+            xhttp.setRequestHeader("Accept", "application/json");     
             xhttp.send();
         });
     }
 
-    // Track
-    isTrackLink(url) {
+    // Song
+    isSongLink(url) {
         return url.pathname.includes("track");
     }
 
-    getTrackId(url) {
+    getSongId(url) {
         let pathParts = url.pathname.split("/");
         return pathParts[pathParts.length - 1];
     }
 
-    searchTrack(url) {
-        let trackId = this.getTrackId(url);
-        let accessToken = this.accessToken;
+    searchSong(url) {
+        let songId = this.getSongId(url);
         return new Promise((resolve, reject) => {
             if (accessToken == null) {
                 reject();
@@ -156,24 +121,16 @@ class SpotifyLinkHandler {
             xhttp.onreadystatechange = function () {
                 if (this.readyState === 4 && this.status === 200) {
                     let result = JSON.parse(xhttp.responseText);
-                    let information = new MusicInformation();
-                    information.mediaType = "song";
-                    information.artist = result.artists["0"].name;
-                    information.album = result.album.name;;
-                    information.song = result.name;
-                    resolve(information);
+                    resolve(result);
                 }
                 else if (this.readyState === 4) {
                     reject();
                 }
             }
-            xhttp.open(`GET`, `https://api.spotify.com/v1/tracks/${trackId}`, true);
+            xhttp.open(`GET`, `http://localhost:8080/bridge?mediatype=song&source=spotify&id=${songId}`, true);
             xhttp.setRequestHeader("Content-type", "application/json");
-            xhttp.setRequestHeader("Accept", "application/json");
-            xhttp.setRequestHeader("Authorization", "Bearer BQAelY_GwGS5fbQmTFqjTM5ra3J48uw0N8pDd2zxutS7lQrp5rghfa0O5lzEUhPi_SDla74yKVHxT2EMQFQ");
+            xhttp.setRequestHeader("Accept", "application/json");     
             xhttp.send();
         });
     }
 }
-
-export default SpotifyLinkHandler;

@@ -1,12 +1,6 @@
 import { MusicInformation } from "../core/MusicInformation";
 
-class AppleMusicLinkHandler {
-    musicKit;
-
-    constructor() {
-        this.musicKit = window.MusicKit.getInstance();
-        console.log(this.musicKit.api.storefrontId);
-    }
+export class AppleMusicLinkHandler {
 
     getInformations(link) {
         let url = new URL(link);
@@ -35,17 +29,25 @@ class AppleMusicLinkHandler {
     searchArtist(url) {
         let artistId = this.getArtistId(url);
         return new Promise((resolve, reject) => {
-            this.musicKit.authorize().then(function() {
-                let musicKit = window.MusicKit.getInstance();
-                musicKit.api.artist(artistId).then((appleMusicArtist) => {
-                    let information = new MusicInformation();
-                    information.mediaType = "artist";
-                    information.artist = appleMusicArtist.attributes.name;
-                    resolve(information);
-                }).catch(() => {
+            if (accessToken == null) {
+                reject();
+                return;
+            }
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    let result = JSON.parse(xhttp.responseText);
+                    resolve(result);
+                }
+                else if (this.readyState === 4) {
                     reject();
-                }); 
-            });
+                }
+            }
+            xhttp.open(`GET`, `http://localhost:8080/bridge?mediatype=artist&source=applemusic&id=${artistId}`, true);
+            xhttp.setRequestHeader("Content-type", "application/json");
+            xhttp.setRequestHeader("Accept", "application/json");     
+            xhttp.send();
         });
     }
 
@@ -65,18 +67,25 @@ class AppleMusicLinkHandler {
     searchAlbum(url) {
         let albumId = this.getAlbumId(url);
         return new Promise((resolve, reject) => {
-            this.musicKit.authorize().then(function() {
-                let musicKit = window.MusicKit.getInstance();
-                musicKit.api.album(albumId).then((appleMusicAlbum) => {
-                    let information = new MusicInformation();
-                    information.mediaType = "album";
-                    information.artist = appleMusicAlbum.attributes.artistName;
-                    information.album = appleMusicAlbum.attributes.name;
-                    resolve(information);
-                }).catch(() => {
+            if (accessToken == null) {
+                reject();
+                return;
+            }
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    let result = JSON.parse(xhttp.responseText);
+                    resolve(result);
+                }
+                else if (this.readyState === 4) {
                     reject();
-                }); 
-            });
+                }
+            }
+            xhttp.open(`GET`, `http://localhost:8080/bridge?mediatype=album&source=applemusic&id=${albumId}`, true);
+            xhttp.setRequestHeader("Content-type", "application/json");
+            xhttp.setRequestHeader("Accept", "application/json");     
+            xhttp.send();
         });
     }
 
@@ -95,21 +104,25 @@ class AppleMusicLinkHandler {
     searchSong(url) {
         let songId = this.getSongId(url);
         return new Promise((resolve, reject) => {
-            this.musicKit.authorize().then(function() {
-                let musicKit = window.MusicKit.getInstance();
-                musicKit.api.song(songId).then((appleMusicSong) => {
-                    let information = new MusicInformation();
-                    information.mediaType = "song";
-                    information.artist = appleMusicSong.attributes.artistName;
-                    information.album = appleMusicSong.attributes.albumName;
-                    information.song = appleMusicSong.attributes.name;
-                    resolve(information);
-                }).catch(() => {
+            if (accessToken == null) {
+                reject();
+                return;
+            }
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    let result = JSON.parse(xhttp.responseText);
+                    resolve(result);
+                }
+                else if (this.readyState === 4) {
                     reject();
-                }); 
-            });
+                }
+            }
+            xhttp.open(`GET`, `http://localhost:8080/bridge?mediatype=song&source=applemusic&id=${songId}`, true);
+            xhttp.setRequestHeader("Content-type", "application/json");
+            xhttp.setRequestHeader("Accept", "application/json");     
+            xhttp.send();
         });
     }
 }
-
-export default AppleMusicLinkHandler;
