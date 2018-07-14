@@ -44,7 +44,7 @@ export class LinkHandler {
                     }
                 }
             }
-            xhttp.open(`GET`, `../links?mediaType=${informations.mediaType}&source=${informations.source}&id=${informations.id}`, true);
+            xhttp.open(`GET`, `https://36hazpb95g.execute-api.eu-central-1.amazonaws.com/alpha/links?mediaType=${informations.mediaType}&source=${informations.source}&id=${informations.id}`, true);
             xhttp.setRequestHeader("Content-type", "application/json");
             xhttp.setRequestHeader("Accept", "application/json");     
             xhttp.send();
