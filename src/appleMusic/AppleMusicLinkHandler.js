@@ -47,7 +47,7 @@ export class AppleMusicLinkHandler {
                     reject();
                 }
             }
-            xhttp.open(`GET`, `http://localhost:8080/bridge?mediatype=artist&source=applemusic&id=${artistId}`, true);
+            xhttp.open(`GET`, `http://localhost:8080/bridge?mediaType=artist&source=applemusic&id=${artistId}`, true);
             xhttp.setRequestHeader("Content-type", "application/json");
             xhttp.setRequestHeader("Accept", "application/json");     
             xhttp.send();

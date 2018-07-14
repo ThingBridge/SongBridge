@@ -11,12 +11,12 @@ export class LinkHandler {
             if(url.hostname.includes("open.spotify"))
             {
                 let spotify = new SpotifyLinkHandler()
-                informations = spotify.getInformations()
+                informations = spotify.getInformations(url)
             }
             else if(url.hostname.includes("itunes.apple"))
             {
                 let applemusic = new AppleMusicLinkHandler()
-                informations = applemusic.getInformations()
+                informations = applemusic.getInformations(url)
             }
             else {
                 console.log("Nicht spotify, nicht apple music");
@@ -28,21 +28,23 @@ export class LinkHandler {
     getLinks(link) {
         return new Promise((resolve, reject) => {
             var informations = this.getInformations(link)
-            if (informations) {
+            if (!informations) {
                 reject("Could not handle link")
             }
 
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
-                if (this.readyState === 4 && this.status === 200) {
-                    let result = JSON.parse(xhttp.responseText);
-                    resolve(result);
-                }
-                else if (this.readyState === 4) {
-                    reject();
+                if (xhttp.readyState === 4) {
+                    if (xhttp.status == 200) {
+                        let result = JSON.parse(xhttp.responseText);
+                        resolve(result);
+                    }
+                    else {
+                        reject(xhttp.statusText)
+                    }
                 }
             }
-            xhttp.open(`GET`, `/links?mediatype=${informations.mediaType}&source=${informations.source}&id=${informations.id}`, true);
+            xhttp.open(`GET`, `../links?mediaType=${informations.mediaType}&source=${informations.source}&id=${informations.id}`, true);
             xhttp.setRequestHeader("Content-type", "application/json");
             xhttp.setRequestHeader("Accept", "application/json");     
             xhttp.send();
