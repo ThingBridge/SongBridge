@@ -1,8 +1,6 @@
 import React from 'react';
 import './App.css';
 import { LinkHandler } from "./core/LinkHandler";
-import { AppleMusicLinkHandler } from './appleMusic/AppleMusicLinkHandler';
-import { SpotifyLinkHandler } from './spotify/SpotifyLinkHandler';
 
 class App extends React.Component {
   spotifyLinkHandler;

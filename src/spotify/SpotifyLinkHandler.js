@@ -3,9 +3,6 @@ import { URLCheck } from "../core/URLCheck";
 
 export class SpotifyLinkHandler {
 
-    constructor() {
-    }
-
     getInformations(link) {
         let musicInformations = new MusicInformation();
         musicInformations.source = "spotify"
