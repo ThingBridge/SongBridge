@@ -9,7 +9,7 @@ class App extends React.Component {
     super(props);
     this.state = { link: "https://open.spotify.com/track/77NNZQSqzLNqh2A9JhLRkg", informations: {}};
     this.handleShare = this.handleShare.bind(this);
-    this.handleShares = this.handleShares.bind(this);
+    //this.handleShares = this.handleShares.bind(this);
   }
 
   handleShare() {
