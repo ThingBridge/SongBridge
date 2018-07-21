@@ -1,5 +1,14 @@
+html,body,#content,#root{
+  height: 100%;
+}
+
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+}
+
+#content{
+  padding: 0;
+  background-image: linear-gradient(to right bottom, #ed1c24, #e21577, #ac4ead, #606abb, #2274a5);
 }

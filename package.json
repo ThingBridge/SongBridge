@@ -4,10 +4,11 @@
   "private": true,
   "homepage": "http://songbridge.s3-website.eu-central-1.amazonaws.com/alpha/pages/",
   "dependencies": {
+    "@material-ui/core": "^1.4.0",
+    "fg-loadcss": "^2.0.1",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "react-scripts": "1.1.4",
-    "rmwc": "^1.8.1"
+    "react-scripts": "1.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
