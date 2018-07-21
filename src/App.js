@@ -1,43 +1,44 @@
 import React from 'react';
-import './App.css';
 import { LinkHandler } from "./core/LinkHandler";
+import './App.css';
+import 'material-components-web/dist/material-components-web.min.css';
+import {
+  Toolbar,
+  ToolbarRow,
+  ToolbarTitle
+} from 'rmwc/Toolbar';
+import { Grid, GridCell } from 'rmwc/Grid';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { LinkInput } from './LinkInput';
+import { ShareSheet } from './ShareSheet';
+
 
 class App extends React.Component {
-  spotifyLinkHandler;
-
-  constructor(props) {
-    super(props);
-    this.state = { link: "https://open.spotify.com/track/77NNZQSqzLNqh2A9JhLRkg", links: []};
-    this.handleShare = this.handleShare.bind(this);
-  }
-
-  handleShare() {
-    var linkHandler = new LinkHandler();
-    linkHandler.getLinks(this.state.link).then((value) => {
-      this.setState({links: value.links});
-    }).catch((reason) => {
-      console.error(reason)
-      alert("Oh nein!")
-    });
-  }
-
   render() {
     return (
-      <div>
-        <h1>SongBridge</h1>
-        <input type="url" onChange={(e) => this.setState({link: e.target.value})} placeholder="Link"></input>
-        <button onClick={this.handleShare}>Teilen</button>
-        <ul>
-            {
-                this.state.links.map(function(link) {
-                    return <li><a href={link.link}>{link.name}</a></li>
-                })
-            }
-            </ul>
-      </div>
+      <Router basename="alpha/bridge/">
+        <div>
+            <Toolbar>
+              <ToolbarRow>
+                  <ToolbarTitle>
+                    <Link style={{ textDecoration: 'none', color:'white' }} to="/">SongBridge</Link>
+                  </ToolbarTitle>
+              </ToolbarRow>
+            </Toolbar>
+            <Grid>
+              <GridCell phone="0" tablet="2" desktop="4"></GridCell>
+              <GridCell phone="4" tablet="4" desktop="4">
+                    <Route path="/" component={LinkInput} exact></Route>
+                    <Route path="/share" component={ShareSheet}></Route>
+              </GridCell>
+              <GridCell phone="0" tablet="2" desktop="4"></GridCell>
+            </Grid>
+        </div>
+      </Router>
     );
   }
 }
+
 
 export default App;
 
