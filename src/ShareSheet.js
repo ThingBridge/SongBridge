@@ -3,12 +3,14 @@ import {
     Card,
     CardPrimaryAction,
     CardAction, CardActionIcons,
-    CardActions
+    CardActions,
+    CardMedia
   } from 'rmwc/Card';
 import { MenuAnchor, Menu, MenuItem } from "rmwc/Menu";
 import { Typography } from "rmwc/Typography";
 import { LinkHandler } from "./core/LinkHandler";
 import { Icon } from "rmwc/Icon";
+import { ListDivider } from "rmwc/List";
 
 export class ShareSheet extends React.Component {
     constructor() {
@@ -16,9 +18,12 @@ export class ShareSheet extends React.Component {
 
         this.share = this.share.bind(this);
         this.getActions = this.getActions.bind(this);
+        this.getHeadline = this.getHeadline.bind(this);
+        this.getCover = this.getCover.bind(this);
 
         this.state = {
-            links: []
+            links: [],
+            information: undefined
         }
     }
 
@@ -33,6 +38,7 @@ export class ShareSheet extends React.Component {
         linkHandler.getLink(source, mediaType, id)
             .then((value) => {
                 this.setState({links: value.links});
+                this.setState({information: value.information});
             })
             .catch((reason) => {
                 console.error(reason)
@@ -67,6 +73,56 @@ export class ShareSheet extends React.Component {
         }
     }
 
+    getHeadline() {
+        if (this.state.information) {
+            if (this.state.information.mediaType === "artist") {
+                return <div>
+                    <div style={{ padding: '0.5rem 1rem' }}>
+                        <Typography use="headline4">
+                            { this.state.information.artist }
+                        </Typography>
+                    </div>
+                    <ListDivider />
+                </div>
+            }
+            else if (this.state.information.mediaType === "album") {
+                return <div>
+                    <div style={{ padding: '0.5rem 1rem' }}>
+                        <Typography use="headline4">
+                            { this.state.information.album }
+                        </Typography>
+                        <br />
+                        <Typography use="subtitle1">
+                            { this.state.information.artist }
+                        </Typography>
+                    </div>
+                    <ListDivider />
+                </div>
+            }
+            else if (this.state.information.mediaType === "song") {
+                return <div>
+                    <div style={{ padding: '0.5rem 1rem' }}>
+                        <Typography use="headline4">
+                            { this.state.information.song }
+                        </Typography>
+                        <br />
+                        <Typography use="subtitle1">
+                            { this.state.information.artist } - { this.state.information.album }
+                        </Typography>
+                    </div>
+                    <ListDivider />
+                </div>
+            }
+        }
+    }
+
+    getCover() {
+        if (this.state.information && this.state.information.cover && this.state.information.cover !== "") {
+            var url = `url(${decodeURIComponent(this.state.information.cover)})`;
+            return <CardMedia square style={{ backgroundImage: url }}/>
+        }
+    }
+
     share() {
         this.setState({'menuIsOpen': !this.state.menuIsOpen})
 
@@ -83,10 +139,16 @@ export class ShareSheet extends React.Component {
     render() {
         return <Card>
             {
+                this.getHeadline()
+            }
+            {
+                this.getCover()
+            }
+            {
                 this.state.links.map((function(link) {
                     return <CardPrimaryAction onClick={() => {window.open(link.link)}}>
                         <div style={{ padding: '1rem' }}>
-                            <Typography use="headline5" tag="div">
+                            <Typography use="headline6" tag="div">
                                 {this.mapLinkName(link.name)}
                             </Typography>
                         </div>

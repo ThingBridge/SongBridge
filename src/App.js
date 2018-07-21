@@ -1,5 +1,4 @@
 import React from 'react';
-import { LinkHandler } from "./core/LinkHandler";
 import './App.css';
 import 'material-components-web/dist/material-components-web.min.css';
 import {
