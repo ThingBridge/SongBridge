@@ -12,3 +12,7 @@ body {
   padding: 0;
   background-image: linear-gradient(to right bottom, #ed1c24, #e21577, #ac4ead, #606abb, #2274a5);
 }
+
+.link-input {
+  width: 100%;
+}

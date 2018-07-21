@@ -1,7 +1,8 @@
 import React from 'react';
 import { TextField } from 'rmwc/TextField';
-import { Button } from 'rmwc/Button';
+import { Button, ButtonIcon } from 'rmwc/Button';
 import { LinkHandler } from './core/LinkHandler';
+import { GridInner, GridCell } from "rmwc/Grid";
 import { Redirect } from "react-router-dom";
 
 export class LinkInput extends React.Component {
@@ -24,16 +25,23 @@ export class LinkInput extends React.Component {
   }
 
   render() {
-    if (this.state.informations) {
-        var link = `/share?source=${this.state.informations.source}&mediaType=${this.state.informations.mediaType}&id=${this.state.informations.id}`
-        return <Redirect push to={link}></Redirect>
-    }
+    if (this.state.informations) { 
+      var link = `/share?source=${this.state.informations.source}&mediaType=${this.state.informations.mediaType}&id=${this.state.informations.id}` 
+      return <Redirect push to={link}></Redirect> 
+    } 
 
     return (
-      <div>
-        <TextField outlined label="Link" type="url" onChange={(e) => this.setState({link: e.target.value})}/>  
-        <Button onClick={this.share}>Teilen</Button>
-      </div>
+      <GridInner>
+        <GridCell phone="4" tablet="8" desktop="12">
+          <TextField box  withLeadingIcon="link" className="link-input" label="Link" type="url" onChange={(e) => this.setState({link: e.target.value})}/> 
+        </GridCell> 
+        <GridCell phone="4" tablet="8" desktop="12">
+          <Button raised onClick={this.share}>
+            <ButtonIcon use="search" />
+            Suchen
+          </Button>
+        </GridCell> 
+      </GridInner>
     );
   }
 }
