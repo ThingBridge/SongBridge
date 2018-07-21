@@ -25,6 +25,39 @@ export class LinkHandler {
         }
     }
 
+    getLink(source, mediaType, id) {
+        return new Promise((resolve, reject) => {
+            fetch(`https://36hazpb95g.execute-api.eu-central-1.amazonaws.com/alpha/links?mediaType=${mediaType}&source=${source}&id=${id}`)
+            .then(res => res.json())
+            .then(links => resolve(links))
+            .catch(reason => reject(reason))
+        });
+        
+        // return new Promise((resolve, reject) => {
+        //     var informations = this.getInformations(link)
+        //     if (!informations) {
+        //         reject("Could not handle link")
+        //     }
+
+        //     var xhttp = new XMLHttpRequest();
+        //     xhttp.onreadystatechange = function () {
+        //         if (xhttp.readyState === 4) {
+        //             if (xhttp.status === 200) {
+        //                 let result = JSON.parse(xhttp.responseText);
+        //                 resolve(result);
+        //             }
+        //             else {
+        //                 reject(xhttp.statusText)
+        //             }
+        //         }
+        //     }
+        //     xhttp.open(`GET`, , true);
+        //     xhttp.setRequestHeader("Content-type", "application/json");
+        //     xhttp.setRequestHeader("Accept", "application/json");     
+        //     xhttp.send();
+        // });
+    }
+
     getLinks(link) {
         return new Promise((resolve, reject) => {
             var informations = this.getInformations(link)
