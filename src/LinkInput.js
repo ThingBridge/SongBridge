@@ -33,13 +33,10 @@ export class LinkInput extends React.Component {
     return (
       <GridInner>
         <GridCell phone="4" tablet="8" desktop="12">
-          <TextField box  withLeadingIcon="link" className="link-input" label="Link" type="url" onChange={(e) => this.setState({link: e.target.value})}/> 
+          <TextField box dense className="link-input" label="Link" onChange={(e) => this.setState({link: e.target.value})}/> 
         </GridCell> 
-        <GridCell phone="4" tablet="8" desktop="12">
-          <Button raised onClick={this.share}>
-            <ButtonIcon use="search" />
-            Suchen
-          </Button>
+        <GridCell phone="4" tablet="8" desktop="12" align="middle" style={{textAlign: "center"}}>
+        <Button use="search" raised label="Suchen" onClick={this.share}><ButtonIcon use="search" />Suchen</Button>
         </GridCell> 
       </GridInner>
     );

@@ -11,6 +11,8 @@ import { Typography } from "rmwc/Typography";
 import { LinkHandler } from "./core/LinkHandler";
 import { Icon } from "rmwc/Icon";
 import { ListDivider } from "rmwc/List";
+import SpotifyIcon from "./icons/spotify.svg";
+import ITunesIcon from "./icons/itunes.svg"
 
 export class ShareSheet extends React.Component {
     constructor() {
@@ -52,6 +54,15 @@ export class ShareSheet extends React.Component {
                 return "Apple Music"
             default:
                 return "Spotify"
+        }
+    }
+
+    mapIcon(name) {
+        switch(name) {
+            case "appleMusic":
+                return ITunesIcon
+            default:
+                return SpotifyIcon
         }
     }
 
